@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ad</title>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
+    </style>
+</head>
+<body>
+    <div id="ad-container"></div>
+    <script type="text/javascript">
+        const urlParams = new URLSearchParams(window.location.search);
+        const adType = urlParams.get('type');
+        const key = urlParams.get('key');
+        const width = parseInt(urlParams.get('width'), 10);
+        const height = parseInt(urlParams.get('height'), 10);
+        const src = urlParams.get('src');
+        const containerId = urlParams.get('containerId');
+
+        const container = document.getElementById('ad-container');
+
+        if (adType === 'banner' && key && width && height) {
+            container.style.width = width + 'px';
+            container.style.height = height + 'px';
+            window.atOptions = {
+                'key': key,
+                'format': 'iframe',
+                'height': height,
+                'width': width,
+                'params': {}
+            };
+            const script = document.createElement('script');
+            script.src = `//www.highperformanceformat.com/${key}/invoke.js`;
+            script.async = true;
+            container.appendChild(script);
+
+        } else if (adType === 'native' && src && containerId) {
+            container.id = containerId;
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = true;
+            script.setAttribute("data-cfasync", "false");
+            document.body.appendChild(script);
+
+        } else if (adType === 'social-bar' && src) {
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = true;
+            document.body.appendChild(script);
+        }
+    </script>
+</body>
+</html>
